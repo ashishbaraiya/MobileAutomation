@@ -1,3 +1,7 @@
+///////*********************************************************************************//////
+/////// Tests in this file require running Selendroid Server using commandline
+///////*********************************************************************************//////
+
 package com.mobileauto.test;
 
 import io.selendroid.client.SelendroidDriver;
@@ -35,6 +39,7 @@ public class SelendroidCapabilitiesTest {
     	  WebElement element1 = driver.findElement(By.name("q"));
     	  element1.click();
     	  element1.sendKeys("This is my MobileWeb Automation.");
+    	  Thread.sleep(5000);
     	  driver.findElement(By.name("btnG")).click();
     	  Thread.sleep(10000);
     	  driver.findElement(By.xpath(".//*[@id='rso']/descendant::a[1]")).click();
