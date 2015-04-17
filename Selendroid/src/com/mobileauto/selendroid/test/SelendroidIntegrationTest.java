@@ -2,7 +2,7 @@
 /////// Tests in this file doesn't require running Selendroid Server using commandline
 ///////*********************************************************************************//////
 
-package com.mobileauto.test;
+package com.mobileauto.selendroid.test;
 
 import io.selendroid.client.SelendroidDriver;
 import io.selendroid.common.SelendroidCapabilities;

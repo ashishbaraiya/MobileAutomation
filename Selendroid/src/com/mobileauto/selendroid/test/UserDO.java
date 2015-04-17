@@ -1,4 +1,4 @@
-package com.mobileauto.test;
+package com.mobileauto.selendroid.test;
 
 public class UserDO {
   public String username;
