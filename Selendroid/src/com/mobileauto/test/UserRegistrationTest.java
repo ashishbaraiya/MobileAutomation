@@ -4,9 +4,8 @@ import io.selendroid.client.SelendroidDriver;
 import io.selendroid.common.SelendroidCapabilities;
 import io.selendroid.standalone.SelendroidConfiguration;
 import io.selendroid.standalone.SelendroidLauncher;
-
+import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.touch.TouchActions;
@@ -15,19 +14,14 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-/**
- * Base Test to demonstrate how to test native android apps with Selendroid. App under test is:
- * src/main/resources/selendroid-test-app-0.10.0.apk
- * 
- * @author ddary
- */
 public class UserRegistrationTest {
   private WebDriver driver = null;
   private static SelendroidLauncher selendroidServer = null;
 
   @BeforeClass
   public void setup() throws Exception {
-	  
+
+
 	if (selendroidServer != null) {
 	selendroidServer.stopSelendroid();
 	}
@@ -37,12 +31,12 @@ public class UserRegistrationTest {
 	selendroidServer.launchSelendroid();
 	    
     driver = new SelendroidDriver(new SelendroidCapabilities("io.selendroid.testapp:0.15.0"));
+	driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
   }
 
   @Test
   public void assertUserAccountCanRegistered() throws Exception {
-    // Initialize test data
-    UserDO user = new UserDO("u$erNAme1", "me@myserver.com", "mySecret", "John Doe", "Python");
+    UserDO user = new UserDO("abaraiya", "ashish@test.com", "password", "Ashish Baraiya", "Python");
 
     registerUser(user);
     verifyUser(user);
@@ -56,7 +50,6 @@ public class UserRegistrationTest {
     username.sendKeys(user.username);
 
     driver.findElement(By.name("email of the customer")).sendKeys(user.email);
-//    Thread.sleep(3000);
     driver.findElement(By.id("inputPassword")).sendKeys(user.password);
 
     WebElement nameInput = driver.findElement(By.xpath("//EditText[@id='inputName']"));
@@ -67,27 +60,41 @@ public class UserRegistrationTest {
     driver.findElement(By.tagName("Spinner")).click();
     Thread.sleep(3000);
     driver.findElement(By.linkText(user.programmingLanguage)).click();
-
+    
+    
     Thread.sleep(3000);
-//    TouchActions taCheckbox = new TouchActions(driver);
-//    WebElement checkBoxButton = driver.findElement(By.className("android.widget.CheckBox"));
-    driver.findElement(By.className("android.widget.CheckBox")).click();
-
-//    taCheckbox.flick(checkBoxButton , 0, -200, 0).perform();
-//    checkBoxButton.click();
-//    driver.findElement(By.id("input_adds")).click();
+    TouchActions taCheckbox = new TouchActions(driver);
+    WebElement checkBoxButton = driver.findElement(By.className("android.widget.CheckBox"));
+    Thread.sleep(3000);
+    taCheckbox.flick(checkBoxButton , 0, -200, 0).perform();
+    Thread.sleep(3000);
+    checkBoxButton.click();
+    
+    while (!checkBoxButton.isSelected())
+    {
+    	checkBoxButton.click();
+    }
     
     Thread.sleep(3000);
     TouchActions taRegisterButton = new TouchActions(driver);
     WebElement registerButton = driver.findElement(By.linkText("Register User (verify)"));
     taRegisterButton.flick(registerButton , 0, -200, 0).perform();
-    
+    Thread.sleep(3000);    
     registerButton.click();
-//    driver.findElement(By.className("android.widget.Button")).click();
-//    driver.findElement(By.linkText("Register User (verify)")).click();
-//    driver.findElement(By.id("btnRegisterUser")).click();
+    Thread.sleep(4000);
+   
+    try
+    {
+	    while(registerButton.isDisplayed() == true)
+	    {
+	    	registerButton.click();
+	    	Thread.sleep(3000);
+	    }
+    }
+    catch(Exception e)     
+    {       
+    }       
     
-    Thread.sleep(5000);
     Assert.assertEquals(driver.getCurrentUrl(), "and-activity://VerifyUserActivity");
   }
 
